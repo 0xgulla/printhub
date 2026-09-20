@@ -1,0 +1,379 @@
+// Version: 4.0.0
+type AnalysisResult__157842152 =
+  {
+    analyzedAt : Timestamp__301639476;
+    blankPages : [Nat];
+    colorPages : [Nat];
+    contentPageCount : Nat;
+    fileId : FileId__283657257;
+    issueNotes : [Text];
+    lowContentPages : [Nat];
+    nearlyBlankPages : [Nat];
+    totalPages : Nat
+  };
+type AnalysisResult__366167586 =
+  {
+    analyzedAt : Int;
+    blankPages : [Nat];
+    colorPages : [Nat];
+    contentPageCount : Nat;
+    fileId : Nat;
+    issueNotes : [Text];
+    lowContentPages : [Nat];
+    nearlyBlankPages : [Nat];
+    totalPages : Nat
+  };
+type AnalysisResult__402990849 =
+  {
+    analyzedAt : Int;
+    blankPages : [Nat];
+    contentPageCount : Nat;
+    fileId : Nat;
+    issueNotes : [Text];
+    lowContentPages : [Nat];
+    nearlyBlankPages : [Nat];
+    totalPages : Nat
+  };
+type ColorMode__1041791309 = {#BlackAndWhite; #Color};
+type ColorMode__790940511 = {#BlackAndWhite; #Color};
+type ColorMode__917746389 = {#BlackAndWhite; #Color};
+type Data__44217153<K, V> = {var count : Nat__227979830; kvs : [var ?(K, V)]};
+type FileId__283657257 = Nat;
+type Internal__283199666<K, V> =
+  {children : [var ?Node__204828119<K, V>]; data : Data__44217153<K, V>};
+type JobId__339598917 = Nat;
+type JobRef__431808711 = Text;
+type JobStatus__1036628613 =
+  {#Cancelled; #Completed; #Failed; #Printing; #Uploaded};
+type JobStatus__1044281027 =
+  {
+    #AwaitingPayment;
+    #Cancelled;
+    #Completed;
+    #Failed;
+    #Paid;
+    #Printing;
+    #SentToPrinter;
+    #Uploaded
+  };
+type JobStatus__357834694 =
+  {#Cancelled; #Completed; #Failed; #Printing; #Uploaded};
+type Leaf__598469445<K, V> = {data : Data__44217153<K, V>};
+type Map__230067015<K, V> = Map__405889023<K, V>;
+type Map__405889023<K, V> = Map__603270868<K, V>;
+type Map__603270868<K, V> =
+  {var root : Node__204828119<K, V>; var size : Nat__227979830};
+type Nat__227979830 = Nat__920180692;
+type Nat__920180692 = Nat;
+type NewActor__248761742 =
+  {
+    accessControlState :
+      {
+        var adminAssigned : Bool;
+        userRoles : Map__230067015<Principal, {#admin; #guest; #user}>
+      };
+    analyses : Map__230067015<Nat, AnalysisResult__366167586>;
+    counters : {var nextFileId : Nat; var nextJobId : Nat};
+    files : Map__230067015<Nat, UploadedFile__313797535>;
+    jobs : Map__230067015<Nat, PrintJob__852683831>;
+    printers : Map__230067015<Text, Printer__1044886385>
+  };
+type NewActor__269912 =
+  {
+    accessControlState :
+      {
+        var adminAssigned : Bool;
+        userRoles : Map__230067015<Principal, {#admin; #guest; #user}>
+      };
+    analyses : Map__230067015<Nat, AnalysisResult__402990849>;
+    counters : {var nextFileId : Nat; var nextJobId : Nat};
+    files : Map__230067015<Nat, UploadedFile__64391725>;
+    jobs : Map__230067015<Nat, PrintJob__408236184>;
+    printers : Map__230067015<Text, Printer__1008933612>
+  };
+type Node__204828119<K, V> =
+  {#internal : Internal__283199666<K, V>; #leaf : Leaf__598469445<K, V>};
+type OldActor__224863313 = {};
+type OldActor__268017246 =
+  {
+    accessControlState :
+      {
+        var adminAssigned : Bool;
+        userRoles : Map__230067015<Principal, {#admin; #guest; #user}>
+      };
+    analyses : Map__230067015<Nat, OldAnalysisResult__379224945>;
+    counters : {var nextFileId : Nat; var nextJobId : Nat};
+    files : Map__230067015<Nat, OldUploadedFile__882412285>;
+    jobs : Map__230067015<Nat, OldPrintJob__201670035>;
+    printers : Map__230067015<Text, OldPrinter__948476609>
+  };
+type OldAnalysisResult__379224945 =
+  {
+    analyzedAt : Int;
+    blankPages : [Nat];
+    contentPageCount : Nat;
+    fileId : Nat;
+    issueNotes : [Text];
+    lowContentPages : [Nat];
+    nearlyBlankPages : [Nat];
+    totalPages : Nat
+  };
+type OldColorMode__927563210 = {#BlackAndWhite; #Color};
+type OldJobStatus__374593865 =
+  {
+    #AwaitingPayment;
+    #Cancelled;
+    #Completed;
+    #Failed;
+    #Paid;
+    #Printing;
+    #SentToPrinter;
+    #Uploaded
+  };
+type OldPageSelection__509496349 = {#All; #Custom};
+type OldPaperSize__926119322 = {#A3; #A4};
+type OldPaymentStatus__539378680 =
+  {#DemoConfirmed; #DemoPending; #NotStarted};
+type OldPrintJob__201670035 =
+  {
+    createdAt : Int;
+    estimatedPrice : Nat;
+    fileId : Nat;
+    fileName : Text;
+    id : Nat;
+    jobRef : Text;
+    options : OldPrintOptions__415927899;
+    owner : Principal;
+    pageCount : Nat;
+    paymentStatus : OldPaymentStatus__539378680;
+    printedPages : Nat;
+    printerId : Text;
+    sizeBytes : Nat;
+    status : OldJobStatus__374593865;
+    updatedAt : Int
+  };
+type OldPrintOptions__415927899 =
+  {
+    colorMode : OldColorMode__927563210;
+    copies : Nat;
+    customRange : ?Text;
+    excludedBlankPages : [Nat];
+    pageSelection : OldPageSelection__509496349;
+    paperSize : OldPaperSize__926119322
+  };
+type OldPrinter__948476609 =
+  {
+    colorModes : [OldColorMode__927563210];
+    description : Text;
+    id : Text;
+    isOnline : Bool;
+    location : Text;
+    name : Text;
+    openingHours : Text;
+    paperSizes : [OldPaperSize__926119322];
+    rating : Nat;
+    speedPagesPerMinute : Nat
+  };
+type OldUploadedFile__882412285 =
+  {
+    contentType : Text;
+    fileName : Text;
+    id : Nat;
+    owner : Principal;
+    pageCount : Nat;
+    sizeBytes : Nat;
+    storedName : Text;
+    uploadedAt : Int
+  };
+type PageSelection__160142151 = {#All; #Custom};
+type PageSelection__432816111 = {#All; #Custom};
+type PageSelection__718990217 = {#All; #Custom};
+type PaperSize__138890055 = {#A3; #A4};
+type PaperSize__357243597 = {#A3; #A4};
+type PaperSize__540025221 = {#A3; #A4};
+type PaymentStatus__986185028 = {#DemoConfirmed; #DemoPending; #NotStarted};
+type PrintJob__408236184 =
+  {
+    createdAt : Int;
+    estimatedPrice : Nat;
+    fileId : Nat;
+    fileName : Text;
+    id : Nat;
+    jobRef : Text;
+    options : PrintOptions__186616998;
+    owner : Principal;
+    pageCount : Nat;
+    paymentStatus : PaymentStatus__986185028;
+    printedPages : Nat;
+    printerId : Text;
+    sizeBytes : Nat;
+    status : JobStatus__1044281027;
+    updatedAt : Int
+  };
+type PrintJob__547487856 =
+  {
+    createdAt : Timestamp__301639476;
+    estimatedPrice : Nat;
+    fileId : FileId__283657257;
+    fileName : Text;
+    id : JobId__339598917;
+    jobRef : JobRef__431808711;
+    options : PrintOptions__847732558;
+    owner : Principal;
+    pageCount : Nat;
+    printedPages : Nat;
+    printerId : PrinterId__92691324;
+    sizeBytes : Nat;
+    status : JobStatus__357834694;
+    updatedAt : Timestamp__301639476
+  };
+type PrintJob__852683831 =
+  {
+    createdAt : Int;
+    estimatedPrice : Nat;
+    fileId : Nat;
+    fileName : Text;
+    id : Nat;
+    jobRef : Text;
+    options : PrintOptions__460198747;
+    owner : Principal;
+    pageCount : Nat;
+    printedPages : Nat;
+    printerId : Text;
+    sizeBytes : Nat;
+    status : JobStatus__1036628613;
+    updatedAt : Int
+  };
+type PrintOptions__186616998 =
+  {
+    colorMode : ColorMode__1041791309;
+    copies : Nat;
+    customRange : ?Text;
+    excludedBlankPages : [Nat];
+    pageSelection : PageSelection__432816111;
+    paperSize : PaperSize__357243597
+  };
+type PrintOptions__460198747 =
+  {
+    colorMode : ColorMode__790940511;
+    copies : Nat;
+    customRange : ?Text;
+    excludedBlankPages : [Nat];
+    pageSelection : PageSelection__160142151;
+    paperSize : PaperSize__138890055
+  };
+type PrintOptions__847732558 =
+  {
+    colorMode : ColorMode__917746389;
+    copies : Nat;
+    customRange : ?Text;
+    excludedBlankPages : [Nat];
+    pageSelection : PageSelection__718990217;
+    paperSize : PaperSize__540025221
+  };
+type PrinterId__92691324 = Text;
+type Printer__1008933612 =
+  {
+    colorModes : [ColorMode__1041791309];
+    description : Text;
+    id : Text;
+    isOnline : Bool;
+    location : Text;
+    name : Text;
+    openingHours : Text;
+    paperSizes : [PaperSize__357243597];
+    rating : Nat;
+    speedPagesPerMinute : Nat
+  };
+type Printer__1044886385 =
+  {
+    colorModes : [ColorMode__790940511];
+    description : Text;
+    id : Text;
+    isOnline : Bool;
+    location : Text;
+    name : Text;
+    openingHours : Text;
+    paperSizes : [PaperSize__138890055];
+    rating : Nat;
+    speedPagesPerMinute : Nat
+  };
+type Printer__332970711 =
+  {
+    colorModes : [ColorMode__917746389];
+    description : Text;
+    id : PrinterId__92691324;
+    isOnline : Bool;
+    location : Text;
+    name : Text;
+    openingHours : Text;
+    paperSizes : [PaperSize__540025221];
+    rating : Nat;
+    speedPagesPerMinute : Nat
+  };
+type Timestamp__301639476 = Int;
+type UploadedFile__313797535 =
+  {
+    contentType : Text;
+    fileName : Text;
+    id : Nat;
+    owner : Principal;
+    pageCount : Nat;
+    sizeBytes : Nat;
+    storedName : Text;
+    uploadedAt : Int
+  };
+type UploadedFile__64391725 =
+  {
+    contentType : Text;
+    fileName : Text;
+    id : Nat;
+    owner : Principal;
+    pageCount : Nat;
+    sizeBytes : Nat;
+    storedName : Text;
+    uploadedAt : Int
+  };
+type UploadedFile__932656776 =
+  {
+    contentType : Text;
+    fileName : Text;
+    id : FileId__283657257;
+    owner : Principal;
+    pageCount : Nat;
+    sizeBytes : Nat;
+    storedName : Text;
+    uploadedAt : Timestamp__301639476
+  };
+{
+  "20260919_000000" : (_old : OldActor__224863313) -> NewActor__269912;
+  "20260920_000000" : (old : OldActor__268017246) -> NewActor__248761742
+}
+actor  {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__230067015<Principal, {#admin; #guest; #user}>
+    };
+  stable analyses :
+    {
+      var root : Node__204828119<FileId__283657257, AnalysisResult__157842152>;
+      var size : Nat__227979830
+    };
+  stable counters : {var nextFileId : Nat; var nextJobId : Nat};
+  stable files :
+    {
+      var root : Node__204828119<FileId__283657257, UploadedFile__932656776>;
+      var size : Nat__227979830
+    };
+  stable jobs :
+    {
+      var root : Node__204828119<JobId__339598917, PrintJob__547487856>;
+      var size : Nat__227979830
+    };
+  stable printers :
+    {
+      var root : Node__204828119<PrinterId__92691324, Printer__332970711>;
+      var size : Nat__227979830
+    }
+};

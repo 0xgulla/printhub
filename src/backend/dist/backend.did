@@ -1,0 +1,263 @@
+type Value = 
+ variant {
+   "bool": bool;
+   float: float64;
+   "int": int;
+   "nat": nat;
+   "null";
+   "text": text;
+ };
+type UserStats = 
+ record {
+   savedFiles: nat;
+   totalPrints: nat;
+   totalSpent: nat;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UploadedFileView = 
+ record {
+   contentType: text;
+   fileName: text;
+   id: FileId;
+   pageCount: nat;
+   sizeBytes: nat;
+   uploadedAt: Timestamp;
+ };
+type UploadValidation = 
+ variant {
+   "empty";
+   ok: AllowedExtension;
+   tooLarge: record {
+               actualBytes: nat;
+               limitBytes: nat;
+             };
+   unsupportedExtension: text;
+ };
+type Timestamp = int;
+type Result__1 = 
+ variant {
+   err: Error;
+   ok;
+ };
+type Result = 
+ record {
+   hasMore: bool;
+   rows: vec vec Cell;
+ };
+type PrinterView = 
+ record {
+   colorModes: vec ColorMode;
+   description: text;
+   id: PrinterId;
+   isOnline: bool;
+   location: text;
+   name: text;
+   openingHours: text;
+   paperSizes: vec PaperSize;
+   rating: nat;
+   speedPagesPerMinute: nat;
+ };
+type PrinterStatus = 
+ record {
+   activeJobId: opt JobId;
+   isOnline: bool;
+   printerId: PrinterId;
+   state: text;
+   updatedAt: Timestamp;
+ };
+type PrinterId = text;
+type PrintProgress = 
+ record {
+   jobId: JobId;
+   printedPages: nat;
+   status: JobStatus;
+   totalPages: nat;
+   updatedAt: Timestamp;
+ };
+type PrintOptions = 
+ record {
+   colorMode: ColorMode;
+   copies: nat;
+   customRange: opt text;
+   excludedBlankPages: vec nat;
+   pageSelection: PageSelection;
+   paperSize: PaperSize;
+ };
+type PrintJobView = 
+ record {
+   createdAt: Timestamp;
+   estimatedPrice: nat;
+   fileId: FileId;
+   fileName: text;
+   id: JobId;
+   jobRef: JobRef;
+   options: PrintOptions;
+   pageCount: nat;
+   printedPages: nat;
+   printerId: PrinterId;
+   sizeBytes: nat;
+   status: JobStatus;
+   updatedAt: Timestamp;
+ };
+type PaperSize = 
+ variant {
+   A3;
+   A4;
+ };
+type PageSelection = 
+ variant {
+   All;
+   Custom;
+ };
+type PageAnalysisInput = 
+ record {
+   blankPages: vec nat;
+   colorPages: vec nat;
+   lowContentPages: vec nat;
+   nearlyBlankPages: vec nat;
+   totalPages: nat;
+ };
+type JobStatus = 
+ variant {
+   Cancelled;
+   Completed;
+   Failed;
+   Printing;
+   Uploaded;
+ };
+type JobRef = text;
+type JobId = nat;
+type FileId = nat;
+type Error = 
+ variant {
+   AmbiguousAttribute: record {
+                         field: text;
+                         sources: vec text;
+                       };
+   FrontendOriginMismatch: record {
+                             expected: vec text;
+                             got: text;
+                           };
+   FrontendOriginsNotConfigured;
+   MalformedCandid;
+   MissingField: text;
+   MixedSsoSources: record {
+                      otherKeys: vec text;
+                      ssoKeys: vec text;
+                    };
+   NoAttributes;
+   Stale: record {ageNs: nat;};
+   UnknownNonce;
+   UntrustedSsoSource: record {domain: text;};
+ };
+type ConnectResult = 
+ record {
+   connected: bool;
+   printerId: PrinterId;
+   state: text;
+ };
+type ColorMode = 
+ variant {
+   BlackAndWhite;
+   Color;
+ };
+type Cell = 
+ record {
+   name: text;
+   value: Value;
+ };
+type AnalysisResultView = 
+ record {
+   analyzedAt: Timestamp;
+   blankPages: vec nat;
+   colorPages: vec nat;
+   contentPageCount: nat;
+   fileId: FileId;
+   issueNotes: vec text;
+   lowContentPages: vec nat;
+   nearlyBlankPages: vec nat;
+   totalPages: nat;
+ };
+type AllowedExtension = 
+ variant {
+   doc;
+   docx;
+   jpeg;
+   jpg;
+   pdf;
+   png;
+ };
+type AdminStats = 
+ record {
+   offlineDevices: nat;
+   onlineDevices: nat;
+   revenue: nat;
+   totalPrints: nat;
+ };
+service : {
+  _initialize_access_control: () -> ();
+  _internet_identity_sign_in_finish: () -> (Result__1);
+  _internet_identity_sign_in_start: () -> (blob);
+  /// Persist the real per-page analysis for an uploaded file.
+  /// 
+  /// The page arrays are computed from the actual PDF content by the client
+  /// (pdf.js) and submitted here; the backend validates them against the
+  /// document's real page count and stores the result.
+  analyzeFile: (fileId: nat, input: PageAnalysisInput) ->
+   (AnalysisResultView);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  /// Cancel a job that has not completed.
+  cancelJob: (jobId: JobId) -> (PrintJobView);
+  /// Simulated connect to a printer device.
+  connectPrinter: (printerId: text) -> (ConnectResult);
+  /// Create a print job and start printing immediately.
+  /// 
+  /// There is no payment step and no printer selection: the job is routed
+  /// through the PrintHub portable device automatically.
+  createJob: (fileId: nat, options: PrintOptions) -> (PrintJobView);
+  /// Compute the estimated price for a job from its options.
+  estimatePrice: (pageCount: nat, options: PrintOptions) -> (nat) query;
+  execute: (qJson: text) -> (Result) query;
+  /// Aggregate statistics for the admin dashboard. Admin-only.
+  getAdminStats: () -> (AdminStats) query;
+  /// Fetch a stored analysis result for a file.
+  getAnalysis: (fileId: nat) -> (opt AnalysisResultView) query;
+  /// Return the PrintHub backend API documentation as Markdown.
+  getApiDoc: () -> (text) query;
+  getCallerUserRole: () -> (UserRole) query;
+  /// Fetch an uploaded file's metadata by id.
+  getFile: (fileId: nat) -> (opt UploadedFileView) query;
+  /// Fetch a print job by id.
+  getJob: (jobId: JobId) -> (opt PrintJobView) query;
+  /// Read the simulated progress of a job.
+  getPrintProgress: (jobId: JobId) -> (opt PrintProgress) query;
+  /// Fetch a single printer by id.
+  getPrinter: (printerId: text) -> (opt PrinterView) query;
+  /// Simulated live status of a printer device.
+  getPrinterStatus: (printerId: text) -> (opt PrinterStatus) query;
+  /// Aggregate statistics for the caller's dashboard.
+  getUserStats: () -> (UserStats) query;
+  isCallerAdmin: () -> (bool) query;
+  /// List the caller's uploaded files.
+  listFiles: () -> (vec UploadedFileView) query;
+  /// List the caller's print jobs, newest first.
+  listJobs: () -> (vec PrintJobView) query;
+  /// List every printer in the network.
+  listPrinters: () -> (vec PrinterView) query;
+  /// Register an uploaded file's metadata after its bytes are stored.
+  registerFile: (fileName: text, contentType: text, sizeBytes: nat,
+   pageCount: nat) -> (UploadedFileView);
+  schema: () -> (text) query;
+  /// Search printers by name or location.
+  searchPrinters: (searchTerm: text) -> (vec PrinterView) query;
+  /// Advance simulated printing for all in-flight jobs.
+  tickPrinting: () -> ();
+  /// Validate an upload's file name and size before its bytes are stored.
+  validateUpload: (fileName: text, sizeBytes: nat) ->
+   (UploadValidation) query;
+}

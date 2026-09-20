@@ -1,0 +1,19 @@
+{
+  "overview": "PrintHub is a cloud printing service where users upload a PDF, have it analyzed by AI, and send it to a portable PrintHub device that prints it on a connected printer.",
+  "features": [
+    "Upload a PDF with drag and drop",
+    "AI checks the document for blank pages and colour pages",
+    "Remove blank pages before printing",
+    "Customize colour, copies, paper size and page range",
+    "Watch the document print through the portable PrintHub device",
+    "Download a receipt and view print history"
+  ],
+  "category": "productivity",
+  "tags": [
+    "printing",
+    "pdf",
+    "ai",
+    "productivity"
+  ],
+  "last_updated": "2026-09-20T11:07:37.649Z"
+}
